@@ -11,3 +11,5 @@ class Step0Schema(marshmallow.SQLAlchemySchema):
   email = marshmallow.auto_field()
   password = marshmallow.auto_field()
   confirm_password = marshmallow.auto_field()
+
+step_0_schema = Step0Schema()
