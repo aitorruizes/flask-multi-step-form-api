@@ -4,18 +4,22 @@ from flask import jsonify
 from flask_cors import cross_origin
 from models.registration_model import RegistrationModel
 from database.db import db
+from schemas.steps.step_0_schema import Step0Schema
+from schemas.steps.step_1_schema import Step1Schema
+from schemas.steps.step_2_schema import Step2Schema
 
 registration_blueprint = Blueprint("registration", __name__)
 
 @registration_blueprint.route("/api/v1/registration", methods=["GET"])
 @cross_origin()
-def getRegistrationByEmail():
+def getRegistrationIdByEmail():
   try:
     email = request.args.get("email")
+    print(email)
     
     filteredRegistration = RegistrationModel.query.filter_by(email=email).first()
 
-    return jsonify(RegistrationModel.to_json(filteredRegistration)), 200
+    return jsonify({ "id": filteredRegistration.id }), 200
   except Exception as exception:
     raise exception
 
@@ -42,8 +46,9 @@ def createRegistrationOnStep0():
     db.session.add(new_registration)
     db.session.commit()
 
-    return jsonify({}), 201
+    step_0_schema = Step0Schema()
 
+    return jsonify(step_0_schema.dump(new_registration)), 201
   except Exception as exception:
     raise exception
 
@@ -59,18 +64,20 @@ def updateRegistrationOnStep1():
     street = request.json["street"]
     street_number = request.json["streetNumber"]
 
-    getRegistration = RegistrationModel.query.filter_by(id=id).first()
+    filteredRegistration = RegistrationModel.query.filter_by(id=id).first()
 
-    getRegistration.country = country
-    getRegistration.state = state
-    getRegistration.city = city
-    getRegistration.neighborhood = neighborhood
-    getRegistration.street = street
-    getRegistration.street_number = street_number
+    filteredRegistration.country = country
+    filteredRegistration.state = state
+    filteredRegistration.city = city
+    filteredRegistration.neighborhood = neighborhood
+    filteredRegistration.street = street
+    filteredRegistration.street_number = street_number
 
     db.session.commit()
 
-    return jsonify(RegistrationModel.to_json(getRegistration)), 200
+    step_1_schema = Step1Schema()
+
+    return jsonify(step_1_schema.dump(filteredRegistration)), 200
   except Exception as exception:
     raise exception
 
@@ -84,15 +91,17 @@ def updateRegistrationOnStep2():
     cvv_code = request.json["cvvCode"]
     cardholder_name = request.json["cardholderName"]
 
-    getRegistration = RegistrationModel.query.filter_by(id=id).first()
+    filteredRegistration = RegistrationModel.query.filter_by(id=id).first()
 
-    getRegistration.card_number = card_number
-    getRegistration.card_expiration_date = card_expiration_date
-    getRegistration.cvv_code = cvv_code
-    getRegistration.cardholder_name = cardholder_name
+    filteredRegistration.card_number = card_number
+    filteredRegistration.card_expiration_date = card_expiration_date
+    filteredRegistration.cvv_code = cvv_code
+    filteredRegistration.cardholder_name = cardholder_name
 
     db.session.commit()
 
-    return jsonify(RegistrationModel.to_json(getRegistration)), 200
+    step_2_schema = Step2Schema()
+
+    return jsonify(step_2_schema.dump(filteredRegistration)), 200
   except Exception as exception:
     raise exception

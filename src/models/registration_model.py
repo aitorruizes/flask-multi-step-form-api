@@ -55,24 +55,3 @@ class RegistrationModel(db.Model):
       self.card_expiration_date = card_expiration_date
       self.cvv_code = cvv_code
       self.cardholder_name = cardholder_name
-
-  def to_json(self) -> dict:
-    return {
-      "id": self.id,
-      "first_name": self.first_name,
-      "last_name": self.last_name,
-      "birthdate": self.birthdate,
-      "email": self.email,
-      "password": self.password,
-      "confirm_password": self.confirm_password,
-      "country": self.country,
-      "state": self.state,
-      "city": self.city,
-      "neighborhood": self.neighborhood,
-      "street": self.street,
-      "street_number": self.street_number,
-      "card_number": self.card_number,
-      "card_expiration_date": self.card_expiration_date,
-      "cvv_code": self.cvv_code,
-      "cardholder_name": self.cardholder_name
-    }
