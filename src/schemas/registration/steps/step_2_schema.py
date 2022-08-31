@@ -1,5 +1,5 @@
 from app import marshmallow
-from models.registration_model import RegistrationModel
+from models.registration.registration_model import RegistrationModel
 
 class Step2Schema(marshmallow.SQLAlchemySchema):
   class Meta:

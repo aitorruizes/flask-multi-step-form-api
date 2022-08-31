@@ -11,6 +11,6 @@ SQLAlchemy(app)
 marshmallow = Marshmallow(app)
 CORS(app)
 
-from routes.registration import registration_blueprint
+from routes.registration.registration_routes import registration_blueprint
 
 app.register_blueprint(registration_blueprint)
